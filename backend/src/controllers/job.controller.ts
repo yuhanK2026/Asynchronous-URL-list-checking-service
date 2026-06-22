@@ -17,7 +17,7 @@ export const createJob = async (req: Request, res: Response) => {
   }
 };
 
-export const getJobs = (req: Request, res: Response) => {
+export const getJobs = (_req: Request, res: Response) => {
   try {
     const jobs = jobService.getAllJobs();
     res.json(jobs);

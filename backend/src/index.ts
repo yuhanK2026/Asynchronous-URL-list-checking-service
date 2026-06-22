@@ -3,7 +3,7 @@ import cors from 'cors';
 import jobRoutes from './routes/job.routes';
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 // Middleware
 app.use(cors());
@@ -13,7 +13,7 @@ app.use(express.json());
 app.use('/api', jobRoutes);
 
 // Health check
-app.get('/health', (req, res) => {
+app.get('/health', (_req, res) => {
   res.status(200).json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
