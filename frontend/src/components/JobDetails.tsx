@@ -12,7 +12,7 @@ const JobDetails: React.FC<JobDetailsProps> = ({ job }) => {
   const [isCancelling, setIsCancelling] = useState(false);
 
   useEffect(() => {
-    let intervalId: NodeJS.Timeout;
+    let intervalId: ReturnType<typeof setInterval>;
     
     if (isPolling && job && !isFinalStatus(job.status)) {
       intervalId = setInterval(() => {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import JobForm from './components/JobForm';
 import JobList from './components/JobList';
 import JobDetails from './components/JobDetails';
@@ -11,8 +11,7 @@ function App() {
     jobs, 
     loading, 
     error,
-    fetchJobs,
-    setActiveJob 
+    fetchJobs
   } = useJobStore();
   
   const activeJob = activeJobId ? jobs.find(job => job.id === activeJobId) : null;

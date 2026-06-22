@@ -75,7 +75,7 @@ export const useJobStore = create<JobStore>((set, get) => ({
       
       // If we have an active job, fetch its details
       const { activeJobId } = get();
-      if (activeJobId && !jobs.find(job => job.id === activeJobId)) {
+      if (activeJobId && !jobs.find((job: Job) => job.id === activeJobId)) {
         set({ activeJobId: null });
       }
     } catch (error: any) {
