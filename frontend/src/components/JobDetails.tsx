@@ -78,7 +78,7 @@ const JobDetails: React.FC<JobDetailsProps> = ({ job }) => {
   }
 
   // Show basic info while results are loading
-  const showBasicInfo = !job.results;
+  const hasResults = job.results && job.results.length > 0;
 
   return (
     <div>
@@ -136,7 +136,7 @@ const JobDetails: React.FC<JobDetailsProps> = ({ job }) => {
         </div>
       </div>
       
-      {showBasicInfo ? (
+      {!hasResults ? (
         <div className="loading" style={{ marginTop: '20px' }}>
           <p>Loading detailed results...</p>
         </div>

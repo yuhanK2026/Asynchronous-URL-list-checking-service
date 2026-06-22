@@ -106,9 +106,13 @@ const processJob = async (jobId: string) => {
       return;
     }
     
-    nextUrl.status = UrlStatus.IN_PROGRESS;
-    nextUrl.startTime = new Date();
-    updateJobStats(job);
+    // Update the URL result in the original job results
+    const urlResultIndex = job.results.findIndex(r => r.url === nextUrl.url);
+    if (urlResultIndex !== -1) {
+      job.results[urlResultIndex].status = UrlStatus.IN_PROGRESS;
+      job.results[urlResultIndex].startTime = new Date();
+      updateJobStats(job);
+    }
     
     const requestPromise = checkUrl(nextUrl.url, jobId)
       .then(async (result) => {
@@ -116,8 +120,10 @@ const processJob = async (jobId: string) => {
         const delay = Math.floor(Math.random() * MAX_DELAY_MS);
         await new Promise(resolve => setTimeout(resolve, delay));
         
-        const urlResult = job.results.find(r => r.url === nextUrl.url);
-        if (urlResult && job.status !== JobStatus.CANCELLED) {
+        // Find and update the URL result in the original job results
+        const urlResultIndex = job.results.findIndex(r => r.url === nextUrl.url);
+        if (urlResultIndex !== -1 && job.status !== JobStatus.CANCELLED) {
+          const urlResult = job.results[urlResultIndex];
           urlResult.status = result.status;
           urlResult.httpStatus = result.httpStatus;
           urlResult.errorMessage = result.errorMessage;

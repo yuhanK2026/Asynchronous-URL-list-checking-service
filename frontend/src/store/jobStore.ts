@@ -23,8 +23,8 @@ export interface UrlResult {
   status: UrlStatus;
   httpStatus?: number;
   errorMessage?: string;
-  startTime?: string;
-  endTime?: string;
+  startTime?: string | Date;
+  endTime?: string | Date;
   duration?: number;
 }
 
