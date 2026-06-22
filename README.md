@@ -99,6 +99,11 @@ docker-compose up --build
 # Frontend: http://localhost:80
 # Backend API: http://localhost:3000
 
+# For simpler deployment, use:
+docker-compose -f docker-compose.simple.yml up --build
+# Frontend: http://localhost:8080
+# Backend API: http://localhost:3000
+
 # Run in detached mode
 docker-compose up -d --build
 

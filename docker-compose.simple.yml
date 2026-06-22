@@ -9,19 +9,12 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=3000
-    networks:
-      - url-checker-network
+    command: sh -c "npm run build && npm start"
 
   frontend:
     build: ./frontend
     container_name: url-checker-frontend
     ports:
-      - "80:80"
+      - "8080:80"
     depends_on:
       - backend
-    networks:
-      - url-checker-network
-
-networks:
-  url-checker-network:
-    driver: bridge
