@@ -93,11 +93,13 @@ export const useJobStore = create<JobStore>((set, get) => ({
       
       // Update the job in the list
       const { jobs } = get();
-      const updatedJobs = jobs.map(job => 
-        job.id === jobId ? { ...job, ...jobDetails } : job
-      );
+      if (Array.isArray(jobs)) {
+        const updatedJobs = jobs.map(job => 
+          job.id === jobId ? { ...job, ...jobDetails } : job
+        );
+        set({ jobs: updatedJobs });
+      }
       
-      set({ jobs: updatedJobs });
       return jobDetails;
     } catch (error: any) {
       set({ 

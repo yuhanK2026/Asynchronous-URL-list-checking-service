@@ -12,11 +12,18 @@ const JobDetails: React.FC<JobDetailsProps> = ({ job }) => {
   const [isCancelling, setIsCancelling] = useState(false);
 
   useEffect(() => {
+    // Fetch job details immediately when component mounts if we don't have results
+    if (job && job.id && !job.results) {
+      fetchJobDetails(job.id);
+    }
+    
     let intervalId: ReturnType<typeof setInterval>;
     
-    if (isPolling && job && !isFinalStatus(job.status)) {
+    if (isPolling && job && job.id && !isFinalStatus(job.status)) {
       intervalId = setInterval(() => {
-        fetchJobDetails(job.id);
+        if (job && job.id) {
+          fetchJobDetails(job.id);
+        }
       }, 2000);
     }
     
@@ -61,13 +68,17 @@ const JobDetails: React.FC<JobDetailsProps> = ({ job }) => {
     }
   };
 
-  if (!job.results) {
+  // Show loading only if we have no job data at all
+  if (!job) {
     return (
       <div className="loading">
         <p>Loading job details...</p>
       </div>
     );
   }
+
+  // Show basic info while results are loading
+  const showBasicInfo = !job.results;
 
   return (
     <div>
@@ -125,31 +136,37 @@ const JobDetails: React.FC<JobDetailsProps> = ({ job }) => {
         </div>
       </div>
       
-      <div className="url-list">
-        <h3 style={{ margin: '20px 0 10px 0' }}>URL Results:</h3>
-        {job.results.map((result, index) => (
-          <div key={`${result.url}-${index}`} className="url-item">
-            <div className={`url-status ${getUrlStatusClass(result.status)}`} />
-            <div className="url-details">
-              <div className="url-text" title={result.url}>
-                {result.url}
-              </div>
-              <div className="url-meta">
-                <span>Status: {result.status}</span>
-                {result.httpStatus && <span>HTTP: {result.httpStatus}</span>}
-                {result.duration && <span>Duration: {formatDuration(result.duration)}</span>}
-                <span>Start: {formatTime(result.startTime)}</span>
-                <span>End: {formatTime(result.endTime)}</span>
-              </div>
-              {result.errorMessage && (
-                <div style={{ fontSize: '12px', color: '#dc3545', marginTop: '3px' }}>
-                  Error: {result.errorMessage}
+      {showBasicInfo ? (
+        <div className="loading" style={{ marginTop: '20px' }}>
+          <p>Loading detailed results...</p>
+        </div>
+      ) : (
+        <div className="url-list">
+          <h3 style={{ margin: '20px 0 10px 0' }}>URL Results:</h3>
+          {job.results.map((result, index) => (
+            <div key={`${result.url}-${index}`} className="url-item">
+              <div className={`url-status ${getUrlStatusClass(result.status)}`} />
+              <div className="url-details">
+                <div className="url-text" title={result.url}>
+                  {result.url}
                 </div>
-              )}
+                <div className="url-meta">
+                  <span>Status: {result.status}</span>
+                  {result.httpStatus && <span>HTTP: {result.httpStatus}</span>}
+                  {result.duration && <span>Duration: {formatDuration(result.duration)}</span>}
+                  <span>Start: {formatTime(result.startTime)}</span>
+                  <span>End: {formatTime(result.endTime)}</span>
+                </div>
+                {result.errorMessage && (
+                  <div style={{ fontSize: '12px', color: '#dc3545', marginTop: '3px' }}>
+                    Error: {result.errorMessage}
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
