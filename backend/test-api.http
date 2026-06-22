@@ -1,0 +1,26 @@
+# URL Checker Service API Tests
+
+### Create a new job
+POST http://localhost:3000/api/jobs
+Content-Type: application/json
+
+{
+  "urls": [
+    "https://example.com",
+    "https://google.com",
+    "https://github.com",
+    "https://nonexistent-domain-123456.com"
+  ]
+}
+
+### Get all jobs
+GET http://localhost:3000/api/jobs
+
+### Get job details (replace :id with actual job ID)
+GET http://localhost:3000/api/jobs/:id
+
+### Cancel a job (replace :id with actual job ID)
+DELETE http://localhost:3000/api/jobs/:id
+
+### Health check
+GET http://localhost:3000/health
