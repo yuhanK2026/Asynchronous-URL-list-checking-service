@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    container_name: url-checker-backend
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    networks:
+      - url-checker-network
+
+  frontend:
+    build: ./frontend
+    container_name: url-checker-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - url-checker-network
+
+networks:
+  url-checker-network:
+    driver: bridge
